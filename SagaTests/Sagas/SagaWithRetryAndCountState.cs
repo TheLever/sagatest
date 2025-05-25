@@ -13,6 +13,7 @@ public class SagaWithRetryAndCountState : SagaStateMachineInstance
     public string? CurrentState { get; set; }
     public Guid? RetryTokenId { get; set; }
 
+    public int IterationCount { get; set; }
     public bool IsDone { get; set; }
     
     public int? ContinueInSeconds { get; set; }
