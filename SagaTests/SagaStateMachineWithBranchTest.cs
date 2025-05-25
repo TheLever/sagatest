@@ -17,6 +17,7 @@ public class SagaStateMachineWithBranchTest(ITestOutputHelper output)
     [Fact]
     public async Task GivenSagaWithoutRateLimitation_WhenInvoked_ThenSagaCompletes()
     {
+        // Arrange
         var correlationId = Guid.NewGuid();
         
         // Act

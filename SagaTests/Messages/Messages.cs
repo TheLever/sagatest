@@ -14,4 +14,8 @@ public record RetryDownload(Guid CorrelationId, Guid DownloadId);
 
 public record InternalStartDownload(Guid CorrelationId, bool ShouldFail);
 
+public record InternalIterationDownloadStart(Guid CorrelationId, bool ShouldFail, int IterationCount);
+
+public record InternalIterationDownloadCompleted(Guid CorrelationId, int IterationCount);
+
 public record RateLimitHit(Guid CorrelationId, int DelayInSeconds);
