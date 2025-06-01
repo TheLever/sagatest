@@ -1,14 +1,8 @@
-// -----------------------------------------------------------------------
-//   <copyright file="TestConfigurationExtensions.cs" company="Not9News">
-//       Copyright (c) Not9News. All rights reserved.
-//   </copyright>
-//  -----------------------------------------------------------------------
 
 using MassTransit;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quartz;
-using SagaTests.Sagas;
 
 namespace SagaTests.TestInfrastructure;
 
@@ -29,8 +23,8 @@ public static class TestConfigurationExtensions
                 x.AddPublishMessageScheduler();
 
                 configure?.Invoke(x);
-                
-                
+
+
                 x.AddConfigureEndpointsCallback((context, name, cfg) =>
                 {
                     cfg.UseInMemoryOutbox(context);

@@ -1,8 +1,3 @@
-// -----------------------------------------------------------------------
-//   <copyright file="DownloadSagaTest.cs" company="Not9News">
-//       Copyright (c) Not9News. All rights reserved.
-//   </copyright>
-//  -----------------------------------------------------------------------
 
 using MassTransit;
 using MassTransit.Testing;
@@ -25,6 +20,7 @@ public class DownloadSagaIITest
             {
                 x.AddSagaStateMachine<DownloadSagaII, DownloadState>()
                     .InMemoryRepository();
+                x.AddLogging();
                 
                 x.AddActivitiesFromNamespaceContaining(typeof(DownloadActivity));
             })
@@ -37,7 +33,7 @@ public class DownloadSagaIITest
 
         await harness.Start();
 
-        var requestClient = harness.GetRequestClient<StartDownload>();
+        var requestClient = harness.GetRequestClient<Messages.StartDownload>();
         
         // Act
         var response = await requestClient.GetResponse<DownloadComplete>(
@@ -63,6 +59,7 @@ public class DownloadSagaIITest
             {
                 x.AddSagaStateMachine<DownloadSagaII, DownloadState>()
                     .InMemoryRepository();
+                x.AddLogging();
             })
             .BuildServiceProvider(true);
         
@@ -73,7 +70,7 @@ public class DownloadSagaIITest
 
         await harness.Start();
 
-        var requestClient = harness.GetRequestClient<StartDownload>();
+        var requestClient = harness.GetRequestClient<Messages.StartDownload>();
         var responseTask = requestClient.GetResponse<DownloadComplete>(new
             {
                 correlationId,
@@ -81,7 +78,7 @@ public class DownloadSagaIITest
             },
             TestContext.Current.CancellationToken);
 
-        Assert.True(await sagaHarness.Consumed.Any<StartDownload>(TestContext.Current.CancellationToken));
+        Assert.True(await sagaHarness.Consumed.Any<Messages.StartDownload>(TestContext.Current.CancellationToken));
         Assert.True(await sagaHarness.Consumed.Any<DownloadIterationComplete>(TestContext.Current.CancellationToken));
     }
 }

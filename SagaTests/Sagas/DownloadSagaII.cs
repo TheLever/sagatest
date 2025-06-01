@@ -1,8 +1,3 @@
-// -----------------------------------------------------------------------
-//   <copyright file="DownloadSagaII.cs" company="Not9News">
-//       Copyright (c) Not9News. All rights reserved.
-//   </copyright>
-//  -----------------------------------------------------------------------
 
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -13,13 +8,14 @@ namespace SagaTests.Sagas;
 
 public class DownloadSagaII : MassTransitStateMachine<DownloadState>
 {
+    static DownloadSagaII()
+    {
+        MessageContracts.Initialize();
+    }
+    
     public DownloadSagaII(ILogger<DownloadSagaII> log)
     {
         this.InstanceState(x => x.CurrentState);
-
-        this.Event(() => this.StartDownload, x => x.CorrelateById(m => m.Message.CorrelationId));
-        
-        this.Event(() => this.DownloadIterationComplete, x => x.CorrelateById(m => m.Message.CorrelationId));
 
         this.Initially(this.When(this.StartDownload)
             .Then(ctx =>
@@ -46,7 +42,7 @@ public class DownloadSagaII : MassTransitStateMachine<DownloadState>
 
     public State? Completed { get; set; }
 
-    public Event<StartDownload>? StartDownload { get; set; }
+    public Event<Messages.StartDownload>? StartDownload { get; set; }
 
     public Event<DownloadIterationComplete>? DownloadIterationComplete { get; set; }
 }
