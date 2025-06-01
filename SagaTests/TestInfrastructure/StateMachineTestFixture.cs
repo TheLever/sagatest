@@ -10,9 +10,8 @@ using MassTransit.Testing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Quartz;
-using Xunit.Abstractions;
 
-namespace SagaTests;
+namespace SagaTests.TestInfrastructure;
 
 public class StateMachineTestFixture<TStateMachine, TInstance>(ITestOutputHelper output) : IAsyncLifetime
     where TStateMachine : class, SagaStateMachine<TInstance>
@@ -22,10 +21,10 @@ public class StateMachineTestFixture<TStateMachine, TInstance>(ITestOutputHelper
     private ServiceProvider? serviceProvider;
     protected TStateMachine? StateMachine;
     protected ITestHarness? TestHarness;
-    
+
     private TimeSpan testOffset;
 
-    public async Task InitializeAsync()
+    public async ValueTask InitializeAsync()
     {
         this.InterceptQuartzSystemTime();
 
@@ -36,12 +35,12 @@ public class StateMachineTestFixture<TStateMachine, TInstance>(ITestOutputHelper
             {
                 cfg.SetKebabCaseEndpointNameFormatter();
                 cfg.AddQuartzConsumers();
-                
+
                 cfg.AddSagaStateMachine<TStateMachine, TInstance>()
                     .InMemoryRepository();
-                
+
                 cfg.AddConsumers(typeof(TStateMachine).Assembly);
-                
+
                 cfg.AddPublishMessageScheduler();
                 cfg.AddDelayedMessageScheduler();
 
@@ -51,7 +50,7 @@ public class StateMachineTestFixture<TStateMachine, TInstance>(ITestOutputHelper
 
                     x.ConfigureEndpoints(context);
                 });
-                
+
                 cfg.SetTestTimeouts(Debugger.IsAttached ? TimeSpan.FromMinutes(10) : TimeSpan.FromSeconds(30));
             });
 
@@ -70,7 +69,7 @@ public class StateMachineTestFixture<TStateMachine, TInstance>(ITestOutputHelper
         this.StateMachine = this.serviceProvider.GetRequiredService<TStateMachine>();
     }
 
-    public async Task DisposeAsync()
+    public async ValueTask DisposeAsync()
     {
         try
         {
@@ -110,7 +109,7 @@ public class StateMachineTestFixture<TStateMachine, TInstance>(ITestOutputHelper
         SystemTime.UtcNow = () => DateTimeOffset.UtcNow;
         SystemTime.Now = () => DateTimeOffset.Now;
     }
-    
+
     private DateTimeOffset GetUtcNow()
     {
         return DateTimeOffset.UtcNow + this.testOffset;

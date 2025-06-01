@@ -5,9 +5,8 @@
 //  -----------------------------------------------------------------------
 
 using Microsoft.Extensions.Logging;
-using Xunit.Abstractions;
 
-namespace SagaTests;
+namespace SagaTests.TestInfrastructure;
 
 public class TestOutputLoggerFactory(ITestOutputHelper output, bool enabled) : ILoggerFactory
 {

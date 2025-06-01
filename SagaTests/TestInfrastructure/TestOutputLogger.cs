@@ -6,7 +6,7 @@
 
 using Microsoft.Extensions.Logging;
 
-namespace SagaTests;
+namespace SagaTests.TestInfrastructure;
 
 public class TestOutputLogger(TestOutputLoggerFactory factory, Func<LogLevel, bool> filter)
     : ILogger

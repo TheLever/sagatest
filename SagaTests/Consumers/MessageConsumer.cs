@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-//   <copyright file="Consumer.cs" company="Not9News">
+//   <copyright file="MessageConsumer.cs" company="Not9News">
 //       Copyright (c) Not9News. All rights reserved.
 //   </copyright>
 //  -----------------------------------------------------------------------
