@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-//   <copyright file="SagaWithRetryAndCount.cs" company="Not9News">
+//   <copyright file="SagaWithRetryAndCountRequestResponse.cs" company="Not9News">
 //       Copyright (c) Not9News. All rights reserved.
 //   </copyright>
 //  -----------------------------------------------------------------------
@@ -9,14 +9,14 @@ using SagaTests.Messages;
 
 namespace SagaTests.Sagas;
 
-public class SagaWithRetryAndCount : MassTransitStateMachine<SagaWithRetryAndCountState>
+public class SagaWithRetryAndCountRequestResponse : MassTransitStateMachine<SagaWithRetryAndCountState>
 {
-    static SagaWithRetryAndCount()
+    static SagaWithRetryAndCountRequestResponse()
     {
         MessageContracts.Initialize();
     }
 
-    public SagaWithRetryAndCount()
+    public SagaWithRetryAndCountRequestResponse()
     {
         this.InstanceState(x => x.CurrentState);
 
@@ -42,7 +42,7 @@ public class SagaWithRetryAndCount : MassTransitStateMachine<SagaWithRetryAndCou
             this.When(this.IterationCompleteEvent)
                 .ThenAsync(async context =>
                 {
-                    context.Saga.IterationCount = context.Saga.IterationCount + 1;
+                    context.Saga.IterationCount += 1;
                     await context.Publish(new InternalIterationDownloadStart(context.Message.CorrelationId, false,
                         context.Saga.IterationCount));
                 }),

@@ -6,7 +6,7 @@
 
 namespace SagaTests.Messages;
 
-public record StartDownload(Guid CorrelationId, bool ShouldFail);
+//public record StartDownload(Guid CorrelationId, bool ShouldFail);
 
 public record DownloadCompleted(Guid CorrelationId);
 

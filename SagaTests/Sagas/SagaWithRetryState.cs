@@ -1,5 +1,5 @@
 // -----------------------------------------------------------------------
-//   <copyright file="SagaWithBranchState.cs" company="Not9News">
+//   <copyright file="SagaWithRetryState.cs" company="Not9News">
 //       Copyright (c) Not9News. All rights reserved.
 //   </copyright>
 //  -----------------------------------------------------------------------

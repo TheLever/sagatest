@@ -1,3 +1,9 @@
+// -----------------------------------------------------------------------
+//   <copyright file="RepeatedMessageConsumer.cs" company="Not9News">
+//       Copyright (c) Not9News. All rights reserved.
+//   </copyright>
+//  -----------------------------------------------------------------------
+
 using MassTransit;
 using SagaTests.Messages;
 
@@ -6,7 +12,7 @@ namespace SagaTests.Consumers;
 public class RepeatedMessageConsumer : IConsumer<InternalIterationDownloadStart>
 {
     private const int IterationCount = 4;
-    
+
     public async Task Consume(ConsumeContext<InternalIterationDownloadStart> context)
     {
         if (context.Message.ShouldFail)
@@ -17,11 +23,12 @@ public class RepeatedMessageConsumer : IConsumer<InternalIterationDownloadStart>
         {
             if (context.Message.IterationCount != RepeatedMessageConsumer.IterationCount)
             {
-                await context.Publish(new InternalIterationDownloadCompleted(context.Message.CorrelationId, RepeatedMessageConsumer.IterationCount));
+                await context.Publish(new InternalIterationDownloadCompleted(context.Message.CorrelationId,
+                    RepeatedMessageConsumer.IterationCount));
             }
             else
             {
-                 await context.Publish(new DownloadCompleted(context.Message.CorrelationId));
+                await context.Publish(new DownloadCompleted(context.Message.CorrelationId));
             }
         }
     }

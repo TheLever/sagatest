@@ -4,7 +4,7 @@
 //   </copyright>
 //  -----------------------------------------------------------------------
 
-namespace SagaTests;
+namespace SagaTests.TestInfrastructure;
 
 internal class TestDisposable : IDisposable
 {
