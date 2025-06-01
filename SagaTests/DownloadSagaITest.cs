@@ -16,8 +16,9 @@ public class DownloadSagaITest
         await using var provider = new ServiceCollection()
             .ConfigureMassTransit(x =>
             {
-                InMemorySagaRepositoryRegistrationExtensions
-                    .InMemoryRepository<DownloadState>(x.AddSagaStateMachine<DownloadSagaI, DownloadState>());
+                x.AddSagaStateMachine<DownloadSagaII, DownloadState>()
+                    .InMemoryRepository();
+                x.AddLogging();
             })
             .BuildServiceProvider(true);
         

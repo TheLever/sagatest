@@ -25,8 +25,8 @@ public class DownloadSagaIITest
             {
                 x.AddSagaStateMachine<DownloadSagaII, DownloadState>()
                     .InMemoryRepository();
+                
                 x.AddActivitiesFromNamespaceContaining(typeof(DownloadActivity));
-                x.AddLogging();
             })
             .BuildServiceProvider(true);
         
