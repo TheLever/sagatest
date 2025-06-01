@@ -6,4 +6,4 @@
 
 namespace SagaTests.Messages;
 
-public record DownloadComplete(Guid CorrelationId, string DownloadUrl);
+//public record DownloadComplete(Guid CorrelationId, string DownloadUrl);

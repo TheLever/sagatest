@@ -56,6 +56,11 @@ public class DownloadActivity(ILogger<DownloadActivity> log) : IStateMachineActi
         
         log.LogWarning($"[DownloadActivity.ExecuteDownload] publishing DownloadIterationComplete {context.Saga.CorrelationId} {context.Saga.CurrentState}");
         // Publish completion event after work is done
-        await consumeContext.Publish(new DownloadIterationComplete(context.Saga.CorrelationId));
+        await consumeContext.Publish<DownloadIterationComplete>(new
+        {
+            context.Saga.CorrelationId,
+            RequestId = context.RequestId, // Explicitly pass RequestId
+            ResponseAddress = consumeContext.ResponseAddress // Preserve response address
+        });
     }
 }

@@ -17,8 +17,17 @@ public class DownloadSagaII : MassTransitStateMachine<DownloadState>
     {
         this.InstanceState(x => x.CurrentState);
 
-        this.Event(() => this.StartDownload, x => x.CorrelateById(m => m.Message.CorrelationId));
-        this.Event(() => this.DownloadIterationComplete, x => x.CorrelateById(m => m.Message.CorrelationId));
+        this.Event(() => this.StartDownload, x =>
+        {
+            x.CorrelateById(m => m.Message.CorrelationId);
+            x.OnMissingInstance(m => m.Fault());
+        });
+        
+        this.Event(() => this.DownloadIterationComplete, x =>
+        {
+            x.CorrelateById(m => m.Message.CorrelationId);
+            x.OnMissingInstance(m => m.Fault());
+        });
 
         this.Initially(this.When(this.StartDownload)
             .Then(ctx =>
@@ -35,13 +44,12 @@ public class DownloadSagaII : MassTransitStateMachine<DownloadState>
 
         this.During(this.Downloading, this.When(this.DownloadIterationComplete)
             .Then(ctx => Console.WriteLine($"Saga {ctx.Saga.CorrelationId}: Received DownloadIterationComplete"))
-            .Respond(ctx =>
+            .RespondAsync(ctx => ctx.Init<DownloadComplete>(new
             {
-                Console.WriteLine(
-                    $"Saga {ctx.Saga.CorrelationId}: Sending DownloadComplete for URL: {ctx.Saga.DownloadUrl}");
-
-                return new DownloadComplete(ctx.Saga.CorrelationId, ctx.Saga.DownloadUrl!);
-            })
+                ctx.Saga.CorrelationId, 
+                ctx.Saga.DownloadUrl,
+                RequestId = ctx.RequestId
+            }))
             .Then(ctx =>
                 Console.WriteLine($"Saga {ctx.Saga.CorrelationId}: Sent DownloadComplete, transitioning to Completed"))
             .TransitionTo(this.Completed)

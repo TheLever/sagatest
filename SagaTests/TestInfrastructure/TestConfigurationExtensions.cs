@@ -33,7 +33,6 @@ public static class TestConfigurationExtensions
                 x.UsingInMemory((context, cfg) =>
                 {
                     cfg.UsePublishMessageScheduler();
-
                     cfg.ConfigureEndpoints(context);
                 });
             });

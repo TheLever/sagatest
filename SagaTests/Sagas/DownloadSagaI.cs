@@ -23,7 +23,12 @@ public class DownloadSagaI : MassTransitStateMachine<DownloadState>
                 ctx.Saga.CorrelationId = ctx.Message.CorrelationId;
                 ctx.Saga.DownloadUrl = ctx.Message.DownloadUrl;
             })
-            .Respond(ctx => new DownloadComplete(ctx.Saga.CorrelationId, ctx.Saga.DownloadUrl!))
+            .RespondAsync(ctx => ctx.Init<DownloadComplete>(new
+            {
+                ctx.Saga.CorrelationId,
+                DownloadUrl = ctx.Saga.DownloadUrl!
+                
+            }))
             .TransitionTo(Completed)
         );
     }

@@ -6,4 +6,4 @@
 
 namespace SagaTests.Messages;
 
-public record DownloadIterationComplete(Guid CorrelationId);
+//public record DownloadIterationComplete(Guid CorrelationId);
