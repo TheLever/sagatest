@@ -1,8 +1,3 @@
-// -----------------------------------------------------------------------
-//   <copyright file="MessageContracts.cs" company="Not9News">
-//       Copyright (c) Not9News. All rights reserved.
-//   </copyright>
-//  -----------------------------------------------------------------------
 
 using MassTransit;
 using SagaTests.Messages;
@@ -21,11 +16,8 @@ public static class MessageContracts
         }
 
         GlobalTopology.Send.UseCorrelationId<StartDownload>(x => x.CorrelationId);
-        GlobalTopology.Send.UseCorrelationId<RetryDownload>(x => x.CorrelationId);
-        GlobalTopology.Send.UseCorrelationId<InternalStartDownload>(x => x.CorrelationId);
-        GlobalTopology.Send.UseCorrelationId<InternalIterationDownloadStart>(x => x.CorrelationId);
-        GlobalTopology.Send.UseCorrelationId<InternalIterationDownloadCompleted>(x => x.CorrelationId);
-        GlobalTopology.Send.UseCorrelationId<RateLimitHit>(x => x.CorrelationId);
+        GlobalTopology.Send.UseCorrelationId<DownloadIterationComplete>(x => x.CorrelationId);
+        GlobalTopology.Send.UseCorrelationId<DownloadComplete>(x => x.CorrelationId);
 
         MessageContracts.initialized = true;
     }

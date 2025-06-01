@@ -16,8 +16,9 @@ public class DownloadSagaITest
         await using var provider = new ServiceCollection()
             .ConfigureMassTransit(x =>
             {
-                InMemorySagaRepositoryRegistrationExtensions
-                    .InMemoryRepository<DownloadState>(x.AddSagaStateMachine<DownloadSagaI, DownloadState>());
+                x.AddSagaStateMachine<DownloadSagaI, DownloadState>()
+                    .InMemoryRepository();
+                x.AddLogging();
             })
             .BuildServiceProvider(true);
         
@@ -28,7 +29,7 @@ public class DownloadSagaITest
 
         await harness.Start();
 
-        var requestClient = harness.GetRequestClient<StartDownload>();
+        var requestClient = harness.GetRequestClient<Messages.StartDownload>();
         
         // Act
         var response = await requestClient.GetResponse<DownloadComplete>(

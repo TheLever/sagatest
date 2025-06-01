@@ -1,8 +1,3 @@
-// -----------------------------------------------------------------------
-//   <copyright file="DownloadSagaI.cs" company="Not9News">
-//       Copyright (c) Not9News. All rights reserved.
-//   </copyright>
-//  -----------------------------------------------------------------------
 
 using MassTransit;
 using SagaTests.Messages;
@@ -11,11 +6,14 @@ namespace SagaTests.Sagas;
 
 public class DownloadSagaI : MassTransitStateMachine<DownloadState>
 {
+    static DownloadSagaI()
+    {
+        MessageContracts.Initialize();
+    }
+    
     public DownloadSagaI()
     {
         InstanceState(x => x.CurrentState);
-
-        Event(() => StartDownload, x => x.CorrelateById(m => m.Message.CorrelationId));
 
         this.Initially(When(StartDownload)
             .Then(ctx =>
@@ -35,15 +33,13 @@ public class DownloadSagaI : MassTransitStateMachine<DownloadState>
     
     #region State
     
-    public State? Downloading { get; set; }
-    
     public State? Completed { get; set; }
     
     #endregion
     
     #region Events
     
-    public Event<StartDownload> StartDownload { get; set; }
+    public Event<Messages.StartDownload> StartDownload { get; set; }
     
     #endregion
 }

@@ -1,8 +1,3 @@
-// -----------------------------------------------------------------------
-//   <copyright file="TestOutputLogger.cs" company="Not9News">
-//       Copyright (c) Not9News. All rights reserved.
-//   </copyright>
-//  -----------------------------------------------------------------------
 
 using Microsoft.Extensions.Logging;
 
@@ -11,7 +6,6 @@ namespace SagaTests.TestInfrastructure;
 public class TestOutputLogger(TestOutputLoggerFactory factory, Func<LogLevel, bool> filter)
     : ILogger
 {
-    private readonly TestOutputLoggerFactory factory = factory;
     private object? scope;
 
     public TestOutputLogger(TestOutputLoggerFactory factory, bool enabled) : this(factory, _ => enabled)
@@ -38,7 +32,7 @@ public class TestOutputLogger(TestOutputLoggerFactory factory, Func<LogLevel, bo
             message += Environment.NewLine + Environment.NewLine + exception;
         }
 
-        this.factory.TestOutputHelper.WriteLine(message);
+        factory.TestOutputHelper.WriteLine(message);
     }
 
     public bool IsEnabled(LogLevel logLevel)

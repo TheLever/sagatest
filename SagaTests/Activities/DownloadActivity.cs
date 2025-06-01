@@ -1,8 +1,3 @@
-// -----------------------------------------------------------------------
-//   <copyright file="DownloadActivity.cs" company="Not9News">
-//       Copyright (c) Not9News. All rights reserved.
-//   </copyright>
-//  -----------------------------------------------------------------------
 
 using MassTransit;
 using Microsoft.Extensions.Logging;
@@ -55,12 +50,11 @@ public class DownloadActivity(ILogger<DownloadActivity> log) : IStateMachineActi
         var consumeContext = context.GetPayload<ConsumeContext>();
         
         log.LogWarning($"[DownloadActivity.ExecuteDownload] publishing DownloadIterationComplete {context.Saga.CorrelationId} {context.Saga.CurrentState}");
+        
         // Publish completion event after work is done
         await consumeContext.Publish<DownloadIterationComplete>(new
         {
             context.Saga.CorrelationId,
-            RequestId = context.RequestId, // Explicitly pass RequestId
-            ResponseAddress = consumeContext.ResponseAddress // Preserve response address
         });
     }
 }
